@@ -2911,12 +2911,14 @@ impl LoginConfigHandler {
         id: String,
         conn_type: ConnType,
         switch_uuid: Option<String>,
-        mut force_relay: bool,
+        _force_relay: bool,
         adapter_luid: Option<i64>,
         shared_password: Option<String>,
         conn_token: Option<String>,
         login_method: &str,
     ) {
+        // Custom build: always relay through our own server (never direct P2P).
+        let mut force_relay = true;
         let mut id = id;
         if id.contains("@") {
             let mut v = id.split("@");
