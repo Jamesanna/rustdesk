@@ -2525,6 +2525,10 @@ fn apply_host_only() {
         hard.insert(k.to_owned(), v.to_owned());
     }
     drop(hard);
+    config::BUILTIN_SETTINGS.write().unwrap().insert(
+        keys::OPTION_ALLOW_COMMAND_LINE_SETTINGS_WHEN_SETTINGS_DISABLED.to_owned(),
+        "Y".to_owned(),
+    );
     let mut overwrite = config::OVERWRITE_SETTINGS.write().unwrap();
     if let Some(server) = config::RENDEZVOUS_SERVERS.first() {
         overwrite.insert(

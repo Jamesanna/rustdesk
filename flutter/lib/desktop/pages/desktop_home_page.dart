@@ -357,7 +357,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                           ),
                           onHover: (value) => refreshHover.value = value,
                         ).marginOnly(right: 8, top: 4),
-                      if (!bind.isDisableSettings())
+                      if (!bind.isDisableSettings() || bind.isIncomingOnly())
                         InkWell(
                           child: Tooltip(
                             message: translate('Change Password'),
@@ -371,8 +371,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                               ).marginOnly(right: 8, top: 4),
                             ),
                           ),
-                          onTap: () => DesktopSettingPage.switch2page(
-                              SettingsTabKey.safety),
+                          onTap: () => bind.isDisableSettings()
+                              ? setPasswordDialog()
+                              : DesktopSettingPage.switch2page(
+                                  SettingsTabKey.safety),
                           onHover: (value) => editHover.value = value,
                         ),
                     ],
