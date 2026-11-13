@@ -2506,7 +2506,31 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
     ThrottledInterval::new(i)
 }
 
+#[cfg(feature = "host-only")]
+fn apply_host_only() {
+    let mut hard = config::HARD_SETTINGS.write().unwrap();
+    for (k, v) in [
+        ("conn-type", "incoming"),
+        ("disable-settings", "Y"),
+        ("disable-ab", "Y"),
+        ("disable-account", "Y"),
+    ] {
+        hard.insert(k.to_owned(), v.to_owned());
+    }
+    drop(hard);
+    let mut overwrite = config::OVERWRITE_SETTINGS.write().unwrap();
+    if let Some(server) = config::RENDEZVOUS_SERVERS.first() {
+        overwrite.insert(
+            keys::OPTION_CUSTOM_RENDEZVOUS_SERVER.to_owned(),
+            server.to_string(),
+        );
+    }
+    overwrite.insert(keys::OPTION_KEY.to_owned(), config::RS_PUB_KEY.to_owned());
+}
+
 pub fn load_custom_client() {
+    #[cfg(feature = "host-only")]
+    apply_host_only();
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
         read_custom_client(data.trim());

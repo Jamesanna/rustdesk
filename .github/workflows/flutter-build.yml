@@ -137,7 +137,7 @@ jobs:
               arch: x86_64,
               flutter-arch: x64,
               vcpkg-triplet: x64-windows-static,
-              build-args: "--vram",
+              build-args: "--vram --host-only",
             }
     steps:
       - name: Export GitHub Actions cache environment variables
@@ -552,8 +552,8 @@ jobs:
               target: aarch64-apple-darwin,
               os: macos-15,
               # extra-build-args: "--disable-flutter-texture-render", # disable this for mac, because we see a lot of users reporting flickering both on arm and x64, and we can not confirm if texture rendering has better performance if htere is no vram, https://github.com/rustdesk/rustdesk/issues/6296
-              extra-build-args: "--screencapturekit",
-              extra-cargo-features: ",screencapturekit",
+              extra-build-args: "--screencapturekit --host-only",
+              extra-cargo-features: ",screencapturekit,host-only",
               arch: aarch64,
               vcpkg-triplet: arm64-osx,
             }

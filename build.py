@@ -153,6 +153,11 @@ def make_parser():
              'for the list rather than repeat it, so the two cannot drift.'
     )
     parser.add_argument(
+        '--host-only',
+        action='store_true',
+        help='Incoming-only build: no outgoing connections, settings locked, server and key fixed'
+    )
+    parser.add_argument(
         '--skip-cargo',
         action='store_true',
         help='Skip cargo build process, only flutter version + Linux supported currently'
@@ -322,6 +327,8 @@ def get_features(args):
         features.append('flutter')
     if args.unix_file_copy_paste:
         features.append('unix-file-copy-paste')
+    if args.host_only:
+        features.append('host-only')
     if args.drm:
         # Say so rather than quietly handing back a stock build: the backend is Linux-only, so on
         # any other host the flag cannot be honoured and the resulting binary would look like a
