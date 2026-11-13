@@ -756,6 +756,16 @@ jobs:
           # Opt-in, and its macOS tests run nowhere else.
           cargo test --locked --release -p clipboard --features unix-file-copy-paste
 
+      - name: Ad-hoc re-sign app (no signing cert)
+        # build.py copies Contents/MacOS/service in after flutter signed the bundle, so the seal
+        # is broken and macOS reports the app as damaged. Re-seal it when there is no real cert.
+        if: env.MACOS_P12_BASE64 == null && env.UPLOAD_ARTIFACT == 'true'
+        run: |
+          APP=./flutter/build/macos/Build/Products/Release/RustDesk.app
+          xattr -cr "$APP"
+          codesign --force --deep --sign - "$APP"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+
       - name: create unsigned dmg
         if: env.UPLOAD_ARTIFACT == 'true'
         run: |
