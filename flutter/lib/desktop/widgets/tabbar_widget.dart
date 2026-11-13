@@ -785,7 +785,15 @@ class WindowActionPanelState extends State<WindowActionPanel> {
                   icon: IconFont.min,
                   onTap: () {
                     if (widget.isMainWindow) {
-                      windowManager.minimize();
+                      // The tray icon exists only for an installed, running service.
+                      if (isWindows &&
+                          bind.isIncomingOnly() &&
+                          bind.mainIsInstalled() &&
+                          !mainGetBoolOptionSync(kOptionStopService)) {
+                        windowManager.hide();
+                      } else {
+                        windowManager.minimize();
+                      }
                     } else {
                       WindowController.fromWindowId(kWindowId!).minimize();
                     }

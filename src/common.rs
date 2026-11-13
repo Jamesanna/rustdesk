@@ -2506,6 +2506,13 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
     ThrottledInterval::new(i)
 }
 
+pub fn get_display_name() -> String {
+    #[cfg(feature = "host-only")]
+    return "007神救援".to_owned();
+    #[cfg(not(feature = "host-only"))]
+    get_app_name()
+}
+
 #[cfg(feature = "host-only")]
 fn apply_host_only() {
     let mut hard = config::HARD_SETTINGS.write().unwrap();
